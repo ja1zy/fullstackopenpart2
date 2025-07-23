@@ -5,6 +5,7 @@ import './App.css'
 
 import Note from './components/Note'
 
+
 {/*
 JSX elements directly inside a map() call always need keys!
 Keys tell React which array item each component corresponds to,
@@ -24,9 +25,7 @@ const App = ({ notes }) => {
             <h1>Notes</h1>
             <ul>
                 {notes.map(note =>
-                    <li key={note.id}>
-                        {note.content}
-                    </li>
+                   <Note key = {note.id} note={note}></Note>
                 )}
             </ul>
         </div>
