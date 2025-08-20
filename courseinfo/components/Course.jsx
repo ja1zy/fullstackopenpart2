@@ -10,16 +10,9 @@ const Header= ({course})=>{
     )
 }
 const Total = ({course})=>{
-    const start=0
-
-    const addTwo = (a,b)=> a.exercises+b.exercises
-
-
-    const total = course.parts.reduce((addTwo,p)=>{
-        console.log(p.exercises,"p")
-        console.log(addTwo)
-        return p.exercises+addTwo.exercises
-    })
+    const total = course.parts.reduce(( a ,b)=>
+         a+b.exercises,0) //note that before the ',' is the accumulator function and after the ',' is the inital value
+        //a is the  accumulator and is the current value
     return (
         <p>
             Number of exercises: {total}
