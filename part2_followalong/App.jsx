@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import noteService from './services/notes'
-
-
 import Note from './component/Note'
+import Notification from './component/Notification.jsx'
+import Footer from './component/Footer'
+
 
 const App = () => {
     const [notes, setNotes] = useState([])
     const [newNote, setNewNote] = useState('')
     const [showAll, setShowAll] = useState(true)
+    const [errorMessage, setErrorMessage] = useState('some error happened...')
+
 
     useEffect(() => {
         noteService
@@ -36,7 +38,6 @@ const App = () => {
     //
 
     const toggleImportanceOf = id => {
-        const url = `http://localhost:3001/notes/${id}`
         const note = notes.find(n => n.id === id)
         //in practice, { ...note } creates a new object with copies of all the properties from the note object.
             const changedNote = { ...note, important: !note.important }
@@ -46,9 +47,12 @@ const App = () => {
             .then(response => {
                 setNotes(notes.map(note => note.id === id ? response.data : note))
             }).catch(error => {
-            alert(
-                `the note '${note.content}' was already deleted from server`
+            setErrorMessage(
+                `Note '${note.content}' was already removed from server`
             )
+            setTimeout(() => {
+                setErrorMessage(null)
+            }, 5000)
             setNotes(notes.filter(n => n.id !== id))
         })
 
@@ -87,6 +91,7 @@ const App = () => {
     return (
         <div>
             <h1>Notes</h1>
+            <Notification message={errorMessage} />
             <div>
                 <button onClick={() => setShowAll(!showAll)}>
                     show {showAll ? 'important' : 'all'}
@@ -104,6 +109,7 @@ const App = () => {
                 <input value={newNote} onChange={handleNoteChange} />
                 <button type="submit">save</button>
             </form>
+            <Footer />
         </div>
     )
 }
